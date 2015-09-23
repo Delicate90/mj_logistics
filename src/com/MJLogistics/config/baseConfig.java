@@ -13,6 +13,7 @@ import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 /** 
  * 项目基本配置
  * 崔翔-Delicate
@@ -51,6 +52,9 @@ public class baseConfig extends JFinalConfig{
 		//arp
 		ActiveRecordPlugin activeRecordPlugin = new ActiveRecordPlugin(druidPlugin);
 		me.add(activeRecordPlugin);
+		//缓存
+		EhCachePlugin cachePlugin = new EhCachePlugin();
+		me.add(cachePlugin);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.MJLogistics.Route;
 
+import com.MJLogistics.api.controller.UserController;
 import com.jfinal.config.Routes;
 /** 
  * api接口路由配置
@@ -10,7 +11,8 @@ public class Api extends Routes{
 
 	@Override
 	public void config() {
-		// TODO Auto-generated method stub
+		
+		add("/api/user", UserController.class);
 		
 	}
 
