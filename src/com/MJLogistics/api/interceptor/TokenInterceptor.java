@@ -1,7 +1,9 @@
 package com.MJLogistics.api.interceptor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
@@ -17,14 +19,22 @@ public class TokenInterceptor implements Interceptor{
 
 	@Override
 	public void intercept(Invocation invocation) {
-		List<String> testList = CacheKit.get("testList", "testList", new IDataLoader() {
+		Set<String> newSet = CacheKit.get("token", "testList", new IDataLoader() {
 			@Override
 			public Object load() {
-				List<String> newList = new ArrayList<String>();
-				return newList;
+				Set<String> newSet = new HashSet<String>();
+				return newSet;
 			}
 		});
-		System.out.println("inInterceptor:"+testList.toString());
+		System.out.println("inInterceptor:"+newSet.toString());
+		Set<String> newSet1 = CacheKit.get("token", "testList1", new IDataLoader() {
+			@Override
+			public Object load() {
+				Set<String> newSet = new HashSet<String>();
+				return newSet;
+			}
+		});
+		System.out.println("inInterceptor1:"+newSet1.toString());
 		invocation.invoke();
 	}
 
