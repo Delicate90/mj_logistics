@@ -578,3 +578,9 @@ java.lang.ClassCastException: java.lang.String cannot be cast to java.util.Set
 	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
 	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
 	at java.lang.Thread.run(Thread.java:745)
+
+2015-09-25 17:19:40
+[WARN]-[Thread: qtp176433427-26]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /api/nav/query
+
+2015-09-25 17:24:55
+[WARN]-[Thread: qtp176433427-20]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: //api/nav/query

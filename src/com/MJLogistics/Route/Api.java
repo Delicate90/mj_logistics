@@ -1,5 +1,6 @@
 package com.MJLogistics.Route;
 
+import com.MJLogistics.api.controller.NavController;
 import com.MJLogistics.api.controller.UserController;
 import com.jfinal.config.Routes;
 /** 
@@ -13,6 +14,7 @@ public class Api extends Routes{
 	public void config() {
 		
 		add("/api/user", UserController.class);
+		add("/api/nav", NavController.class);
 		
 	}
 

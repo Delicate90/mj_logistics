@@ -26,20 +26,23 @@ public class User extends Model<User>{
 	}
 	
 	public boolean save(String username,String head,String role,String name,String sex,String mobile,String area,String address){
-		
-		
-		
+	
 		return false;
 	}
 	public static JSONObject login(String username,String validateNum,String deviceId){
 		JSONObject items = new JSONObject();
 		boolean rs = false;
-		if(!username.equals("")&&!validateNum.equals("")){
-			Record user = Db.findFirst("SELECT * FROM b_user WHERE username = ? AND validateNum = ? AND status = 1",username,validateNum);
-			if(user != null){
+		if(!username.equals("")&&!validateNum.equals("")&&!deviceId.equals("")){
+			//status 0=初始化 1=正常
+			Record user = Db.findFirst("SELECT * FROM b_user WHERE username = ? AND validateNum = ? AND status < 2",username,validateNum);
+			Long nowTime = System.currentTimeMillis();
+			if(user != null || (nowTime-user.getTimestamp("validateTime").getTime())>=300000){
 				rs = true;
+				user.set("validateNum", "----");
+				Db.update("b_user", user);
 				items.put("user", user.toJson());
-				
+				String agentToken = Token.add(username, deviceId);
+				items.put("agentToken", agentToken);
 				if(user.getInt("role") != 0){				
 					Record auth = Db.findFirst("SELECT * FROM b_auth WHERE username = ? AND role = ?",username,user.getInt("role"));
 					if(auth != null){

@@ -19,23 +19,28 @@ public class TokenInterceptor implements Interceptor{
 
 	@Override
 	public void intercept(Invocation invocation) {
-		Set<String> newSet = CacheKit.get("token", "testList", new IDataLoader() {
-			@Override
-			public Object load() {
-				Set<String> newSet = new HashSet<String>();
-				return newSet;
-			}
-		});
-		System.out.println("inInterceptor:"+newSet.toString());
-		Set<String> newSet1 = CacheKit.get("token", "testList1", new IDataLoader() {
-			@Override
-			public Object load() {
-				Set<String> newSet = new HashSet<String>();
-				return newSet;
-			}
-		});
-		System.out.println("inInterceptor1:"+newSet1.toString());
-		invocation.invoke();
+		
+//		String token = invocation.getController().getResponse().getHeader("agentToken");
+		String token = invocation.getController().getRequest().getHeader("agentToken");
+		if(token != null && !token.equals("")){
+			Set<String> tokenSet = CacheKit.get("token", "tokenSet", new IDataLoader() {
+				@Override
+				public Object load() {
+					Set<String> tokenSet = new HashSet<String>();
+					return tokenSet;
+				}
+			});
+			int oldSize = tokenSet.size();
+			tokenSet.add(token);
+			int newSize = tokenSet.size();
+			if(oldSize == newSize){			
+				invocation.invoke();
+			}else{
+				invocation.getController().renderJson("err", "token missing");
+			}			
+		}else{
+			invocation.getController().renderJson("err", "token missing");
+		}
 	}
 
 }

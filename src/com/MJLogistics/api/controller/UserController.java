@@ -22,7 +22,7 @@ public class UserController extends Controller{
 
 	public void login(){
 		String username = getPara("username","");
-		String validateNum = getPara("validateNum","");
+		String validateNum = getPara("validateNumber","");
 		String deviceId = getPara("deviceId","");
 		JSONObject items = User.login(username, validateNum, deviceId);
 		renderJson("items", items);
@@ -30,8 +30,9 @@ public class UserController extends Controller{
 	public void add(){
 		
 	}
+	@Before(TokenInterceptor.class)
 	public void edit(){
-		
+		renderJson();
 	}
 	public void query(){
 		
