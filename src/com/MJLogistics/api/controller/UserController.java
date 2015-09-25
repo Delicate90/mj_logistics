@@ -21,7 +21,7 @@ import com.jfinal.plugin.ehcache.IDataLoader;
 public class UserController extends Controller{
 
 	public void login(){
-		String username = getPara("username","");
+		String username = getPara("mobile","");
 		String validateNum = getPara("validateNumber","");
 		String deviceId = getPara("deviceId","");
 		JSONObject items = User.login(username, validateNum, deviceId);

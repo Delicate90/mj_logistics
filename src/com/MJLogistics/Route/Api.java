@@ -2,6 +2,7 @@ package com.MJLogistics.Route;
 
 import com.MJLogistics.api.controller.NavController;
 import com.MJLogistics.api.controller.UserController;
+import com.MJLogistics.api.controller.ValidateController;
 import com.jfinal.config.Routes;
 /** 
  * api接口路由配置
@@ -15,6 +16,7 @@ public class Api extends Routes{
 		
 		add("/api/user", UserController.class);
 		add("/api/nav", NavController.class);
+		add("/api/validate", ValidateController.class);
 		
 	}
 

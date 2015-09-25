@@ -11,14 +11,14 @@ public class Validate {
 
 	public static boolean send(String mobile){
 		if(!mobile.equals("")&&ValidateKit.mobile(mobile)){
-			Record user = Db.findFirst("SELECT * FROM b_user WHERE mobile = ?");
+			Record user = Db.findFirst("SELECT * FROM b_user WHERE mobile = ?",mobile);
 			String rdString = SmsKit.onlyInt(4);
 			String[] rd = {rdString};
 			Timestamp now = new Timestamp(System.currentTimeMillis());
 			if(user == null){
 				user = new Record();
 				user.set("username", mobile).set("mobile", mobile).set("status", 0);
-				user.set("validetaNum", rdString).set("validateTime", now);
+				user.set("validateNum", rdString).set("validateTime", now);
 				boolean rs = SmsKit.sendToOne(mobile, "1", rd);
 				if(rs){
 					Db.save("b_user", user);		
@@ -27,7 +27,7 @@ public class Validate {
 					return false;
 				}
 			}else{
-				user.set("validetaNum", rdString).set("validateTime", now);
+				user.set("validateNum", rdString).set("validateTime", now);
 				boolean rs = SmsKit.sendToOne(mobile, "1", rd);
 				if(rs){
 					Db.update("b_user", user);

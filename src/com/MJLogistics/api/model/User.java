@@ -34,20 +34,22 @@ public class User extends Model<User>{
 		boolean rs = false;
 		if(!username.equals("")&&!validateNum.equals("")&&!deviceId.equals("")){
 			//status 0=初始化 1=正常
-			Record user = Db.findFirst("SELECT * FROM b_user WHERE username = ? AND validateNum = ? AND status < 2",username,validateNum);
+			Record user = Db.findFirst("SELECT bu.*,fur.content AS roleValue,fus.content AS sexValue FROM b_user AS bu LEFT JOIN f_user_role AS fur ON bu.role = fur.id LEFT JOIN f_user_sex AS fus ON bu.sex = fus.id WHERE bu.username = ? AND bu.validateNum = ? AND bu.status < 2",username,validateNum);
 			Long nowTime = System.currentTimeMillis();
-			if(user != null || (nowTime-user.getTimestamp("validateTime").getTime())>=300000){
-				rs = true;
-				user.set("validateNum", "----");
-				Db.update("b_user", user);
-				items.put("user", user.toJson());
-				String agentToken = Token.add(username, deviceId);
-				items.put("agentToken", agentToken);
-				if(user.getInt("role") != 0){				
-					Record auth = Db.findFirst("SELECT * FROM b_auth WHERE username = ? AND role = ?",username,user.getInt("role"));
-					if(auth != null){
-						items.put("auth", auth.toJson());
+			if(user != null ){
+				if((nowTime-user.getTimestamp("validateTime").getTime())>=300000){
+					Db.update("UPDATE b_user SET validateNum = ? WHERE username = ?","----",user.getStr("username"));
+					items.put("user", user.toJson());
+					String agentToken = Token.add(username, deviceId);
+					System.out.println(agentToken);
+					items.put("agentToken", agentToken);
+					if(user.getInt("role") != 0){				
+						Record auth = Db.findFirst("SELECT * FROM b_auth WHERE username = ? AND role = ?",username,user.getInt("role"));
+						if(auth != null){
+							items.put("auth", auth.toJson());
+						}
 					}
+					rs = true;
 				}
 			}			
 		}
