@@ -12,6 +12,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.jfinal.plugin.ehcache.IDataLoader;
+import com.jfinal.upload.UploadFile;
 
 /** 
 * @author Delicate
@@ -32,37 +33,27 @@ public class UserController extends Controller{
 	}
 	@Before(TokenInterceptor.class)
 	public void edit(){
-		renderJson();
+		String username = getPara("username", "");
+		System.out.println(username);
+		String nickName = getPara("nickname", "");
+		String name = getPara("name", "");
+		int sex = getParaToInt("sex", 0);
+		int role = getParaToInt("role", 0);
+		String telephone = getPara("telephone", "");
+		String area = getPara("area", "");
+		String address = getPara("address", "");
+		JSONObject items = User.edit(username, role, name, nickName, sex, telephone, area, address);
+		System.out.println(items.toJSONString());
+		renderJson("items",items);
+	}
+	@Before(TokenInterceptor.class)
+	public void headerEdit(){
+		UploadFile header = getFile("header");
+		String username = getPara("username", "");
+		JSONObject items = User.headerEdit(username, header.getFile());
+		renderJson("items", items);
 	}
 	public void query(){
 		
-	}
-	@Before(TokenInterceptor.class)
-	public void test(){
-		String test = getPara("test","1");
-		List sss = CacheKit.getKeys("token");
-		System.out.println("sss1:"+sss.get(0));
-		System.out.println("sss2:"+sss.get(1));
-		Set<String> newSet = CacheKit.get("token", "testList", new IDataLoader() {
-			@Override
-			public Object load() {
-				Set<String> newSet = new HashSet<String>();
-				return newSet;
-			}
-		});
-		Set<String> newSet1 = CacheKit.get("token", "testList1", new IDataLoader() {
-			@Override
-			public Object load() {
-				Set<String> newSet = new HashSet<String>();
-				return newSet;
-			}
-		});
-		int oldLength = newSet.size();
-		newSet.add(test);
-		int newLength = newSet.size();
-		newSet1.add("1111"+test);
-		CacheKit.put("token", "testList1", newSet);
-		CacheKit.put("token", "testList", newSet1);
-		renderJson();
 	}
 }

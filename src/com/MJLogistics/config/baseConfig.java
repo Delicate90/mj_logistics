@@ -43,7 +43,7 @@ public class baseConfig extends JFinalConfig{
 	public void configPlugin(Plugins me) {
 		//加载配置文件
 		Properties properties = loadPropertyFile("config.properties");
-		String url = "jdbc:mysql://"+properties.getProperty("sys_mysql_url")+":"+properties.getProperty("sys_mysql_port")+"/"+properties.getProperty("sys_mysql_sqlname");
+		String url = "jdbc:mysql://"+properties.getProperty("sys_mysql_url")+":"+properties.getProperty("sys_mysql_port")+"/"+properties.getProperty("sys_mysql_sqlname") + "?useUnicode=true&characterEncoding=UTF-8";
 		String username = properties.getProperty("sys_mysql_username");
 		String password = properties.getProperty("sys_mysql_password");
 		//连接池

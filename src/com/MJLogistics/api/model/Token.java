@@ -14,9 +14,12 @@ import com.jfinal.plugin.ehcache.IDataLoader;
 */
 public class Token {
 
+	private static String Salting = "developByDelicate";
 	public static String add(String username,String deviceId){
 		String timestamp = String.valueOf(System.currentTimeMillis());
-		String token = CodeKit.formatSHA((username + deviceId + timestamp)) + "_" + timestamp;
+		String token = CodeKit.formatSHA((username + deviceId + Salting + timestamp)) + "_" + timestamp;
+		System.out.println("model-Token.log::username:"+username);
+		System.out.println("model-Token.log::userAgentToken:"+token);
 		Set<String> tokenSet = CacheKit.get("token", "tokenSet", new IDataLoader() {
 			@Override
 			public Object load() {
