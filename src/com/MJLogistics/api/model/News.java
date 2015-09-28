@@ -14,15 +14,21 @@ import com.jfinal.plugin.activerecord.Record;
 */
 public class News {
 
-	public static JSONObject query(int lastId){
+	public static JSONObject queryList(int lastId){
 		JSONObject items = new JSONObject();
 		List<Record> newsList;
 		if(lastId == 0){
-			newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC LIMIT 15");
+			newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC LIMIT 10");
 		}else{
-			newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.id < ? AND vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC LIMIT 15",lastId);
+			newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.id < ? AND vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC LIMIT 10",lastId);
 		}
 		items.put("list", JsonKit.toJson(newsList));
+		return items;
+	}
+	public static JSONObject query(int newsId){
+		JSONObject items = new JSONObject();
+		Record news = Db.findById("v_news", newsId);
+		items.put("news", news.toJson());
 		return items;
 	}
 	public static boolean browse(int newsId){

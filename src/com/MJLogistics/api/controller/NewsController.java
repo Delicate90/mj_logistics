@@ -13,9 +13,14 @@ import com.jfinal.core.Controller;
 */
 public class NewsController extends Controller{
 
-	public void query(){
+	public void queryList(){
 		int lastId = getParaToInt("lastId",0);
-		JSONObject items = News.query(lastId);
+		JSONObject items = News.queryList(lastId);
+		renderJson("items", items);
+	}
+	public void query(){
+		int newsId = getParaToInt("newsId",0);
+		JSONObject items = News.query(newsId);
 		renderJson("items", items);
 	}
 	public void browse(){

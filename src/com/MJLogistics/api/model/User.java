@@ -55,9 +55,13 @@ public class User extends Model<User>{
 		boolean rs = false;
 		if(!username.equals("")){
 			Record user = Db.findFirst("SELECT * FROM b_user WHERE username = ? AND status = 1",username);
+			Record auth = null ;
 			if(user != null){
 				if(role != 0){
 					user.set("role", role);
+					auth = Db.findFirst("SELECT * FROM b_auth WHERE username = ?",username);
+					auth.set("role", role);
+					Db.update("b_auth", auth);
 				}
 				if(!name.equals("")){
 					user.set("name", name);
@@ -104,15 +108,21 @@ public class User extends Model<User>{
 			//status 0=初始化 1=正常
 			Record user = Db.findFirst("SELECT bu.*,fur.content AS roleValue,fus.content AS sexValue FROM b_user AS bu LEFT JOIN f_user_role AS fur ON bu.role = fur.id LEFT JOIN f_user_sex AS fus ON bu.sex = fus.id WHERE bu.username = ? AND bu.validateNum = ? AND bu.status < 2",username,validateNum);
 			Long nowTime = System.currentTimeMillis();
+			//validate时会初始化b_user 这里null 一定有误
 			if(user != null ){
 				if((nowTime-user.getTimestamp("validateTime").getTime())<300000){
 					Db.update("UPDATE b_user SET validateNum = ? , status = 1 WHERE username = ?","----",user.getStr("username"));
 					items.put("user", user.toJson());
 					String agentToken = Token.add(username, deviceId);
-					items.put("agentToken", agentToken);
-					if(user.getInt("role") != 0){				
-						Record auth = Db.findFirst("SELECT * FROM b_auth WHERE username = ? AND role = ?",username,user.getInt("role"));
-						if(auth != null){
+					items.put("agentToken", agentToken);			
+					Record auth = Db.findFirst("SELECT * FROM b_auth WHERE username = ? AND role = ?",username,user.getInt("role"));
+					if(auth != null){
+						items.put("auth", auth.toJson());
+					}else{
+						auth = new Record();
+						auth.set("username", username).set("role", user.getInt("role")).set("status", 0);
+						boolean authRs = Db.save("b_auth", auth);
+						if (authRs) {
 							items.put("auth", auth.toJson());
 						}
 					}

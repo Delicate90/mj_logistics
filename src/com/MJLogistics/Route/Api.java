@@ -1,5 +1,6 @@
 package com.MJLogistics.Route;
 
+import com.MJLogistics.api.controller.AuthController;
 import com.MJLogistics.api.controller.NavController;
 import com.MJLogistics.api.controller.NewsController;
 import com.MJLogistics.api.controller.NoticeController;
@@ -21,6 +22,7 @@ public class Api extends Routes{
 		add("/api/validate", ValidateController.class);
 		add("/api/notice",NoticeController.class);
 		add("/api/news",NewsController.class);
+		add("/api/auth",AuthController.class);
 		
 	}
 
