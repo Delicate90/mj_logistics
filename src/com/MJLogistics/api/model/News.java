@@ -16,7 +16,12 @@ public class News {
 
 	public static JSONObject query(int lastId){
 		JSONObject items = new JSONObject();
-		List<Record> newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC");
+		List<Record> newsList;
+		if(lastId == 0){
+			newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC LIMIT 15");
+		}else{
+			newsList = Db.find("SELECT vn.*,vne.browse,vne.share FROM v_news AS vn LEFT JOIN v_news_extend AS vne ON vn.id = vne.newsId WHERE vn.id < ? AND vn.type = 2 AND vn.status = 3 ORDER BY vn.updateTime DESC LIMIT 15",lastId);
+		}
 		items.put("list", JsonKit.toJson(newsList));
 		return items;
 	}

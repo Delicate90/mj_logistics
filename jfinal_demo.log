@@ -1625,3 +1625,9 @@ java.lang.OutOfMemoryError: PermGen space
 	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
 	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
 	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+
+2015-09-28 11:20:37
+[WARN]-[Thread: qtp1848170714-21]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /webhooks/weeklyAvailable
+
+2015-09-28 11:20:38
+[WARN]-[Thread: qtp1848170714-26]-[com.jfinal.core.ActionHandler.handle()]: 404 Action Not Found: /webhooks/dailyAvailable

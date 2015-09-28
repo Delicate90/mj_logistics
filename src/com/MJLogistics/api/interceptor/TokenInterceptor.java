@@ -22,6 +22,7 @@ public class TokenInterceptor implements Interceptor{
 		
 //		String token = invocation.getController().getResponse().getHeader("agentToken");
 		String token = invocation.getController().getRequest().getHeader("agentToken");
+		System.out.println("interceptor.token.log::userAgentToken:"+token);
 		if(token != null && !token.equals("")){
 			Set<String> tokenSet = CacheKit.get("token", "tokenSet", new IDataLoader() {
 				@Override
@@ -30,6 +31,7 @@ public class TokenInterceptor implements Interceptor{
 					return tokenSet;
 				}
 			});
+			System.out.println("interceptor.token.log::tokenSet:"+tokenSet.toString());
 			int oldSize = tokenSet.size();
 			tokenSet.add(token);
 			int newSize = tokenSet.size();
